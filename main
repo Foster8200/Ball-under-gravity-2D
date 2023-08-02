@@ -1,0 +1,53 @@
+import matplotlib.pyplot as plt
+import math
+
+# Constants
+initial_velocity = float(input('Inital velocity of ball(m/s): '))  # meters per second
+
+while True:
+    try:
+        launch_angle_degrees = float(input('launch angle of ball(degrees): '))  # degrees
+
+        if launch_angle_degrees < 0 or launch_angle_degrees > 90:
+            raise ValueError
+
+        break
+    except ValueError:
+        print('Please enter a value between 0 up to 90.')
+
+acceleration_due_to_gravity = -9.81  # meters per second squared
+
+# Convert launch angle from degrees to radians
+launch_angle_radians = math.radians(launch_angle_degrees)
+
+# the horizontal and vertical components of initial velocity
+horizontal_velocity = initial_velocity * math.cos(launch_angle_radians)
+vertical_velocity = initial_velocity * math.sin(launch_angle_radians)
+
+# Calculate the total time of flight
+total_time_of_flight = (2 * vertical_velocity) / (-acceleration_due_to_gravity)
+
+# Calculate time intervals for plotting
+time_intervals = 0.01  # seconds
+num_points = int(total_time_of_flight / time_intervals) + 1
+
+# Lists to store positions
+time_list = []
+horizontal_position_list = []
+vertical_position_list = []
+
+# Simulation loop
+time = 0.0
+for i in range(num_points):
+    time_list.append(time)
+    horizontal_position_list.append(horizontal_velocity * time)
+    vertical_position_list.append((vertical_velocity * time) + (0.5 * acceleration_due_to_gravity * time ** 2))
+    time += time_intervals
+
+# Plot the trajectory
+plt.plot(horizontal_position_list, vertical_position_list)
+plt.xlabel('Horizontal Position (m)')
+plt.ylabel('Vertical Position (m)')
+plt.title('Projectile Motion Trajectory')
+plt.grid(True)
+plt.show()
